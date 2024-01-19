@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDFljKDh7CBFWJrdjZ0vY56imjX_Ufy_JI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>483627368581</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.caremeAdmin</string>
+	<key>PROJECT_ID</key>
+	<string>careme-test1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>careme-test1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:483627368581:ios:2fb49ac3eb97647e9629ec</string>
+	<key>DATABASE_URL</key>
+	<string>https://careme-test1-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

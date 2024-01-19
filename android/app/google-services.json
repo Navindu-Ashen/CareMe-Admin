@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "483627368581",
+    "firebase_url": "https://careme-test1-default-rtdb.firebaseio.com",
+    "project_id": "careme-test1",
+    "storage_bucket": "careme-test1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483627368581:android:b4b06f195e2f7f279629ec",
+        "android_client_info": {
+          "package_name": "com.example.careme_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaFhHvATc9O7hD6wQccpDLtYq30UkWG88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483627368581:android:7189915e3e76f0009629ec",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaFhHvATc9O7hD6wQccpDLtYq30UkWG88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
