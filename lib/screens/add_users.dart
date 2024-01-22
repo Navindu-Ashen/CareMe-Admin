@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:careme_admin/widgets/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 final _firebase = FirebaseAuth.instance;
@@ -17,27 +22,54 @@ class _AddUsersScreenState extends State<AddUsersScreen> {
   var _userPassword = "";
   var _vehicalNumber = "";
   var errorMsg = "";
+  var _isAuthenticating = false;
+  File? _selectedImage;
 
   void _submit() async {
     var isValid = _form.currentState!.validate();
 
     if (!isValid) {
+      return;
+    } else if (_selectedImage == null) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Fill all the fields with the correct details."),
+          content: Text("Add Profile picture to continue."),
         ),
       );
       return;
     }
+    setState(() {
+      _isAuthenticating = true;
+    });
+
     FocusScope.of(context).unfocus();
 
     _form.currentState!.save();
-    _form.currentState!.reset();
 
     try {
       final userCredentials = await _firebase.createUserWithEmailAndPassword(
           email: _userEmail, password: _userPassword);
+
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child("user-images")
+          .child("${userCredentials.user!.uid}.jpg");
+
+      await storageRef.putFile(_selectedImage!);
+      final imageUrl = await storageRef.getDownloadURL();
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredentials.user!.uid)
+          .set({
+        "user-name": _userName,
+        "email": _userEmail,
+        "image-url": imageUrl,
+        "vehical-number": _vehicalNumber,
+      });
+
+      _form.currentState!.reset();
     } on FirebaseAuthException catch (error) {
       if (error.code == "email-already-in-use") {
         errorMsg = "Email adderss is already in use";
@@ -53,7 +85,16 @@ class _AddUsersScreenState extends State<AddUsersScreen> {
           content: Text(errorMsg),
         ),
       );
+      setState(() {
+        _isAuthenticating = false;
+      });
+      return;
     }
+    setState(() {
+      _isAuthenticating = false;
+    });
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -69,10 +110,10 @@ class _AddUsersScreenState extends State<AddUsersScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Image.asset(
                     "assets/images/logoAdmin.png",
-                    width: double.infinity,
+                    width: 250,
                   ),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 16),
                 Text(
                   'Add a new member!',
                   style: TextStyle(
@@ -80,15 +121,23 @@ class _AddUsersScreenState extends State<AddUsersScreen> {
                     fontSize: 16,
                   ),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Form(
                     key: _form,
                     child: Column(
                       children: [
+                        UserImagePicker(
+                          onPickedImage: (pickedImage) {
+                            _selectedImage = pickedImage;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
                         TextFormField(
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                           keyboardType: TextInputType.emailAddress,
                           textCapitalization: TextCapitalization.none,
                           autocorrect: false,
@@ -218,29 +267,47 @@ class _AddUsersScreenState extends State<AddUsersScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 25),
-                GestureDetector(
-                  onTap: _submit,
-                  child: Container(
-                    padding: const EdgeInsets.all(25),
-                    margin: const EdgeInsets.symmetric(horizontal: 25),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Add User",
-                        style: TextStyle(
+                const SizedBox(height: 20),
+                if (_isAuthenticating)
+                  GestureDetector(
+                    onTap: _submit,
+                    child: Container(
+                      padding: const EdgeInsets.all(25),
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(
                           color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
+                if (!_isAuthenticating)
+                  GestureDetector(
+                    onTap: _submit,
+                    child: Container(
+                      padding: const EdgeInsets.all(25),
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Add User",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

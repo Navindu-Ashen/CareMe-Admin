@@ -1,4 +1,4 @@
-import 'package:careme_admin/screens/add_users.dart';
+import 'package:careme_admin/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -18,14 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'CareMe Admin',
       theme: ThemeData().copyWith(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 107, 145, 196),
         ),
       ),
-      home: const AddUsersScreen(),
+      home: const HomeScreen(),
     );
   }
 }
