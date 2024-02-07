@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="CareMe Admin"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAcKZHMOpRIqKUPAAP1U-n8Vp6nEtg7pcs"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
